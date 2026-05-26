@@ -1,7 +1,7 @@
 from typing import Dict, List
 import matplotlib.pyplot as plt
 import numpy as np
-from mpl_toolkits.mplot3d import Axes3D               # noqa: F401
+from mpl_toolkits.mplot3d import Axes3D               
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
 from models import Container, Placement
@@ -50,45 +50,45 @@ def plot_solution_3d(
 
     placed_vol = sum(p.w * p.h * p.d for p in placements)
     util_pct = 100.0 * placed_vol / container.volume
-    ax.set_title(f"{title}\n{len(placements)} cutii | Utilizare: {util_pct:.2f}%", fontsize=11)
+    ax.set_title(f"{title}\n{len(placements)} boxes | Utilization: {util_pct:.2f}%", fontsize=11)
 
     plt.tight_layout()
     if save_path:
         plt.savefig(save_path, dpi=130, bbox_inches="tight")
-        print(f"  Salvat: {save_path}")
+        print(f"  Saved: {save_path}")
     plt.show()
 
 
-def plot_convergence(results: Dict[str, dict], save_path: str = "convergenta.png") -> None:
+def plot_convergence(results: Dict[str, dict], save_path: str = "convergence.png") -> None:
     dataset_names = list(results.keys())
     n = len(dataset_names)
     fig, axes = plt.subplots(1, n, figsize=(6 * n, 5))
     if n == 1:
         axes = [axes]
 
-    fig.suptitle("Convergența AG vs. Tabu Search", fontsize=13, fontweight="bold")
+    fig.suptitle("GA vs. Tabu Search Convergence", fontsize=13, fontweight="bold")
 
     for ax, dname in zip(axes, dataset_names):
         res = results[dname]
         ga_h = [v * 100 for v in res["ga"]["history"]]
         ts_h = [v * 100 for v in res["ts"]["history"]]
 
-        ax.plot(ga_h, color="#2563EB", linewidth=2, label=f"AG ({ga_h[-1]:.1f}%)")
+        ax.plot(ga_h, color="#2563EB", linewidth=2, label=f"GA ({ga_h[-1]:.1f}%)")
         ax.plot(ts_h, color="#DC2626", linewidth=2, linestyle="--", label=f"TS ({ts_h[-1]:.1f}%)")
-        ax.set_title(f"{dname} ({res['n_boxes']} cutii)")
-        ax.set_xlabel("Iterații")
-        ax.set_ylabel("Utilizare (%)")
+        ax.set_title(f"{dname} ({res['n_boxes']} boxes)")
+        ax.set_xlabel("Iterations")
+        ax.set_ylabel("Space Utilization (%)")
         ax.legend()
         ax.grid(True, alpha=0.3)
         ax.set_ylim(0, 100)
 
     plt.tight_layout()
     plt.savefig(save_path, dpi=150, bbox_inches="tight")
-    print(f"  Salvat: {save_path}")
+    print(f"  Saved: {save_path}")
     plt.show()
 
 
-def plot_comparison_bars(results: Dict[str, dict], save_path: str = "comparare.png") -> None:
+def plot_comparison_bars(results: Dict[str, dict], save_path: str = "comparison.png") -> None:
     dataset_names = list(results.keys())
     ga_utils = [results[d]["ga"]["space_util"] for d in dataset_names]
     ts_utils = [results[d]["ts"]["space_util"] for d in dataset_names]
@@ -99,12 +99,12 @@ def plot_comparison_bars(results: Dict[str, dict], save_path: str = "comparare.p
     w = 0.35
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13, 5))
-    fig.suptitle("Comparare AG vs. Tabu Search", fontsize=13, fontweight="bold")
+    fig.suptitle("GA vs. Tabu Search Comparison", fontsize=13, fontweight="bold")
 
-    bars1 = ax1.bar(x - w/2, ga_utils, w, label="AG",   color="#2563EB", alpha=0.85)
+    bars1 = ax1.bar(x - w/2, ga_utils, w, label="GA",   color="#2563EB", alpha=0.85)
     bars2 = ax1.bar(x + w/2, ts_utils, w, label="TS",   color="#DC2626", alpha=0.85)
-    ax1.set_ylabel("Utilizare (%)")
-    ax1.set_title("Utilizare spațiu")
+    ax1.set_ylabel("Space Utilization (%)")
+    ax1.set_title("Space Utilization")
     ax1.set_xticks(x); ax1.set_xticklabels(dataset_names)
     ax1.set_ylim(0, 100); ax1.legend(); ax1.grid(axis="y", alpha=0.3)
     for bar in bars1:
@@ -114,10 +114,10 @@ def plot_comparison_bars(results: Dict[str, dict], save_path: str = "comparare.p
         ax1.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 1,
                  f"{bar.get_height():.1f}%", ha="center", fontsize=9)
 
-    bars3 = ax2.bar(x - w/2, ga_times, w, label="AG",   color="#2563EB", alpha=0.85)
+    bars3 = ax2.bar(x - w/2, ga_times, w, label="GA",   color="#2563EB", alpha=0.85)
     bars4 = ax2.bar(x + w/2, ts_times, w, label="TS",   color="#DC2626", alpha=0.85)
-    ax2.set_ylabel("Timp (s)")
-    ax2.set_title("Timp execuție")
+    ax2.set_ylabel("Time (s)")
+    ax2.set_title("Execution Time")
     ax2.set_xticks(x); ax2.set_xticklabels(dataset_names)
     ax2.legend(); ax2.grid(axis="y", alpha=0.3)
     for bar in bars3:
@@ -129,5 +129,5 @@ def plot_comparison_bars(results: Dict[str, dict], save_path: str = "comparare.p
 
     plt.tight_layout()
     plt.savefig(save_path, dpi=150, bbox_inches="tight")
-    print(f"  Salvat: {save_path}")
+    print(f"  Saved: {save_path}")
     plt.show()

@@ -31,13 +31,22 @@ def print_dataset_summary(name: str, boxes: List[Box], container: Container) -> 
     print(f"  [{name}] {len(boxes)} cutii | Volum total: {total_vol:.1f} | Max util: {max_util:.1f}%")
 
 
-CONTAINER = Container(W=100, H=100, D=100)
+CONTAINER = Container(W=200, H=50, D=50)
 
 DATASETS = {
     "small":        generate_dataset(CONTAINER, n_boxes=10, seed=1),
     "medium":       generate_dataset(CONTAINER, n_boxes=20, seed=2),
     "large":        generate_dataset(CONTAINER, n_boxes=35, seed=3),
     "fixed_orient": generate_dataset(CONTAINER, n_boxes=15, seed=4, fixed_orientations=True),
+    
+    "custom_auto":  generate_dataset(CONTAINER, n_boxes=50, min_frac=0.05, max_frac=0.25, seed=99),
+    
+    "custom_manual": [
+        Box(id=0, w=30, h=20, d=15),
+        Box(id=1, w=10, h=10, d=10),
+        Box(id=2, w=50, h=5,  d=40),
+        Box(id=3, w=20, h=20, d=20)
+    ],
 }
 
 
